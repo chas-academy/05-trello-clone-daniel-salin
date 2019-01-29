@@ -49,11 +49,12 @@ const jtrello = (function() {
   /* ============== Metoder för att hantera listor nedan ============== */
   function createList() {
     event.preventDefault();
-    console.log("This should create a new list");
+    let cloneColumn = DOM.$columns.last().prev().clone(true, true)
+    cloneColumn.insertBefore(DOM.$columns.last());
   }
 
   function deleteList() {
-    console.log("This should delete the list you clicked on");
+    $(this).closest('.column').remove();
   }
 
   /* =========== Metoder för att hantera kort i listor nedan =========== */

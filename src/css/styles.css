@@ -44,10 +44,11 @@ input {
 
 .board {
     height: 100vh;
+    display:flex;
 }
 
 .column {
-  width: 270px;
+  min-width: 270px;
   margin: 0 5px;
   height: 100%;
   box-sizing: border-box;
