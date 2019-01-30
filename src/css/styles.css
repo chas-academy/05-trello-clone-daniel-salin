@@ -106,7 +106,7 @@ input {
   width: 100%;
 }
 
-.card {
+.cards {
   text-decoration: none;
   display: flex;
   background: #fff;
@@ -118,12 +118,12 @@ input {
   margin-bottom: 5px;
   transition: transform 0.25s ease;
   transition: opacity 0.25s ease;
-  height: 16px;
+  height: 30px;
   position: relative;
   z-index: 0;
 }
 
-.card .button {
+.cards .button {
   position: absolute;
   top: 6px;
   right: 10px;
