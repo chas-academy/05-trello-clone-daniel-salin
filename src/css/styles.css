@@ -95,6 +95,7 @@ input {
   margin: 0 4px;
   padding: 0 4px;
   min-height: 0;
+  z-index: 1
 }
 
 .list-cards .add-new {
@@ -119,6 +120,7 @@ input {
   transition: opacity 0.25s ease;
   height: 30px;
   position: relative;
+  z-index: 0;
 }
 
 .cards .button {
@@ -129,18 +131,25 @@ input {
 }
 
 .ui-dialog {
-  background: #e2e4e6;
+  background: #949494;
   border-radius: 3px;
   padding: 10px;
   z-index: 50;
+  color: white;
 }
 
 .ui-dialog .ui-dialog-titlebar {
+  background: #757575;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 .ui-dialog .ui-dialog-titlebar-close {
+  padding: 10px;
+  background: black;
+  
+}
+.ui-dialog .ui-dialog-titlebar-close span {
   display: none;
 }
 
@@ -151,6 +160,7 @@ input {
 .ui-dialog button {
   margin-right: 8px;
 }
+
 
 .ui-button,
 .button {
@@ -190,15 +200,11 @@ input {
   transform: rotate(4deg);
 }
 
-.ui-draggable-dragging { 
-  background: rgb(78, 78, 78); 
-  color: white;
-  width: 150px;
-  height: 40px;
-  border-radius: 10px;
-  z-index: 30;
+.ui-button .ui-corner-all .ui-widget .ui-button-icon-only .ui-dialog-titlebar-close {
+  background: red;
+  padding: 5px;
 }
 
-.ui-draggable-dragging .delete {
-  display: none;
+.highlight {
+  background-color: peachpuff;
 }

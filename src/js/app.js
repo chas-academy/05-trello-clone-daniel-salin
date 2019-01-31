@@ -10,7 +10,7 @@ import '../css/styles.css';
 
 // Här tillämpar vi mönstret reavealing module pattern:
 // Mer information om det mönstret här: https://bit.ly/1nt5vXP
-const jtrello = (function() {
+const jtrello = (function () {
   "use strict"; // https://lucybain.com/blog/2014/js-use-strict/
 
   // Referens internt i modulen för DOM element
@@ -23,9 +23,6 @@ const jtrello = (function() {
     DOM.$columns = $('.column');
     DOM.$lists = $('.list');
     DOM.$cards = $('.cards');
-    
-    // Clone counter
-    let listCounter = DOM.$columns.length;
 
     DOM.$newListButton = $('button#new-list');
     DOM.$deleteListButton = $('.list-header > button.delete');
@@ -34,18 +31,51 @@ const jtrello = (function() {
     DOM.$deleteCardButton = $('.cards > button.delete');
   }
 
+function _restrictCol() {
+  let array = $('.column');
+  console.log(array.length);
+  return array.length-1;
+}
+
+
   function createTabs() {}
-  function createDialogs() {}
-  function dragCards() {
-    DOM.$cards.draggable({
-      helper: 'clone'
+
+  function createDialogs() {
+    let maxLists = $('<div id="maxBoardsDialog"><span>Only 5 boards at a time</span></div>');
+    maxLists.dialog({
+      modal: true,
+      autoOpen: false,
+      show: {
+          effect: 'bounce',
+          times: 5,
+          duration: 1000,
+          distance: 300
+      },
+      hide: {
+          effect: 'explode',
+          duration: 1000
+      }    
+  });
+
+  }
+
+  function sortCards() {
+    $('.list-cards').sortable({
+      connectWith: ".list-cards"
+    });
+  }
+
+  function sortLists() {
+    $('.board').sortable({
+      axis: "x",
+      dropOnEmpty: true
     });
   }
 
   /*
-  *  Denna metod kommer nyttja variabeln DOM för att binda eventlyssnare till
-  *  createList, deleteList, createCard och deleteCard etc.
-  */
+   *  Denna metod kommer nyttja variabeln DOM för att binda eventlyssnare till
+   *  createList, deleteList, createCard och deleteCard etc.
+   */
   function bindEvents() {
     DOM.$newListButton.on('click', createList);
     DOM.$deleteListButton.on('click', deleteList);
@@ -57,16 +87,28 @@ const jtrello = (function() {
   /* ============== Metoder för att hantera listor nedan ============== */
   function createList() {
     event.preventDefault();
-    let cloneColumn = DOM.$columns.last().prev().clone(true, false);
-    cloneColumn.find('.cards').draggable(
-      {helper: 'clone'}
-    );
-    cloneColumn.insertBefore(DOM.$columns.last());
-    
+    let count = jtrello.test();
+    if(count >= 5) {
+      $('')
+      
+    } else {
+      let clonedList = DOM.$columns.last().prev().clone(false, false); 
+      clonedList.show();
+      clonedList.find('.list-cards').sortable({connectWith: '.list-cards'});
+      clonedList.find('.delete').on('click', deleteList);
+      clonedList.insertBefore(DOM.$board.find('.column').last());
+      jtrello.test();
+    }
   }
 
   function deleteList() {
-    $(this).closest('.column').remove();
+    let count = jtrello.test()-1;
+    console.log(count);
+    if(count < 1) {
+      $(this).closest('.column').hide();
+    } else {
+      $(this).closest('.column').remove();
+    }
   }
 
   /* =========== Metoder för att hantera kort i listor nedan =========== */
@@ -91,18 +133,21 @@ const jtrello = (function() {
     captureDOMEls();
     createTabs();
     createDialogs();
-    dragCards();
-
+    sortCards();
+    sortLists();
     bindEvents();
   }
 
   // All kod här
   return {
-    init: init
+    init: init,
+    test: _restrictCol
+    
   };
 })();
 
 //usage
-$("document").ready(function() {
+$("document").ready(function () {
   jtrello.init();
+  jtrello.test();
 });
