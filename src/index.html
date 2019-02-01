@@ -27,7 +27,7 @@
                         </form>
                     </li>
                     <li class="cards my-3">
-                        <span class="cards-content">Card #1</span>
+                        <p class="cards-content">Card #1</p>
                         <button class="button delete">X</button>
                     </li>
                 </ul>
@@ -67,9 +67,10 @@
                         </form>
                     </li>
                     <li class="cards my-3">
-                        <span class="cards-content">Card #3</span>
+                        <p class="cards-content">Card #3</p>
                         <button class="button delete">X</button>
                     </li>
+
                 </ul>
             </div>
         </div>
@@ -83,25 +84,33 @@
         </div>
     </div>
     <div id="cardDialog">
+        <header class="d-flex justify-content-end">
+            <button id="close-dialog" class="btn btn-sm btn-danger">X</button>
+        </header>
         <div id="tabs">
             <ul>
-                <li><a href="#date">Set Date</a></li>
-                <li><a href="#content">Edit Content</a></li>
+                <li><a href="#info">Card Information</a></li>
+                <li><a href="#style">Change Card Style</a></li>
+                
             </ul>
-            <div id="date">
-                <h2>Edit Date</h2>
-                <form class="set-date" action="index.html">
-                    <input class="datepick" type="text" name="cardDate" placeholder="Chose date" />
-                    <button type="submit" class="datepickerBtn button add">Date</button>
-                </form>
+            <div id="info">
 
+                <input type="hidden" name="card-id-content" value="">
+                <ul id="card-details">
+                    <form class="new-card" action="index.html">
+                        <input type="hidden" name="card-id" value="">
+                        <li>Title:<input type="text" name="card-title" placeholder="Enter New Title" /></li>
+                        <li>Task:</li><textarea name="card-task" class="p-1"cols=60 placeholder="Enter New Task"></textarea>
+                        <li>Deadline:<input type="text" name="card-date" class="datepick" placeholder="Chose date" /></li>
+                        <button type="submit" id="card-edit-btn" class="button add my-2">Submit changes</button>
+                    </form>
+                </ul>
             </div>
-            <div id="content">
-                <h2>Edit Content</h2>
-                <form class="new-card" action="index.html">
-                    <input type="text" name="cardContent" value="test" placeholder="Enter Task" />
-                    <button type="submit" class="editCardBtn button add">Enter Task</button>
-                </form>
+            <div id="style">
+                <h2>Change Card Style</h2>
+               <div class="jumbotron">
+                
+               </div>
             </div>
         </div>
     </div>

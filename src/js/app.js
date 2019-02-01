@@ -24,12 +24,12 @@ const jtrello = (function () {
     DOM.$lists = $('.list');
     DOM.$cards = $('.cards');
     DOM.$editCards = $('.cards > .cards-content');
+    DOM.$closeDialogButton = $('#close-dialog');
 
     DOM.$newListButton = $('button#new-list');
     DOM.$deleteListButton = $('.list-header > button.delete');
 
-    DOM.$datepickerSubmit = $('.datepickerBtn');
-    DOM.$editCardSubmit = $('.editCardBtn');
+    DOM.$editCardSubmit = $('#card-edit-btn');
 
     DOM.$newCardForm = $('form.new-card');
     DOM.$deleteCardButton = $('.cards > button.delete');
@@ -81,16 +81,18 @@ const jtrello = (function () {
       modal: true,
       autoOpen: false,
       show: {
-        effect: 'bounce',
-        times: 5,
-        duration: 1000,
-        distance: 300
+        effect: 'explode',
+        duration: 100
       },
       hide: {
         effect: 'explode',
-        duration: 1000
+        duration: 100
       }
     });
+  }
+
+  function closeDialog() {
+    $('#cardDialog').dialog('close');
   }
 
   function makeSortable() {
@@ -103,10 +105,18 @@ const jtrello = (function () {
   }
 
   function editCard() {
-    $('input[name="cardContent"]').val();
+    let thisCardId = $(this).closest('.cards').attr('id');
     
-    let x = $(this).parent().find('.cards-content').text();
-    $('#cardDialog').find('#content .new-card input').val(x);
+    let thisCardTitle = localStorage.getItem(`${thisCardId}_title`);
+    let thisCardTask= localStorage.getItem(`${thisCardId}_task`);
+    let thisCardDate = localStorage.getItem(`${thisCardId}_date`);
+    
+    $('#cardDialog').find('input[name="card-id"]').val(thisCardId);
+    $('#cardDialog').find('input[name="card-title"]').val(thisCardTitle);
+    $('#cardDialog').find('textarea[name="card-task"]').val(thisCardTask);
+    $('#cardDialog').find('input[name="card-date"]').val(thisCardDate);
+    
+
     
     // let dialogData =($('#cardDialog').find('#content .new-card input').val());
     $('#cardDialog').dialog('open');
@@ -119,27 +129,33 @@ const jtrello = (function () {
   function bindEvents() {
     DOM.$newListButton.on('click', createList);
     DOM.$deleteListButton.on('click', deleteList);
-    DOM.$datepickerSubmit.on('click', setDeadline);
     DOM.$editCards.on('click', editCard);
+    
     DOM.$editCardSubmit.on('click', editCardContent);
+    DOM.$closeDialogButton.on('click', closeDialog);
 
     DOM.$newCardForm.on('submit', createCard);
     DOM.$deleteCardButton.on('click', deleteCard);
   }
 
   /* ============== Metoder för att hantera edit card dialog data nedan ============== */
-  function setDeadline() {
+  
+// Den här funktionen skriver lagrar förändringar i kortens data i localstorage
+  function editCardContent() {
     event.preventDefault();
-    let datepickerDate = $('input[name="cardDate"]').val();
+    let cardId = $('input[name="card-id"]').val();
+    let cardTitle = $('input[name="card-title"]').val();
+    let cardTask = $('textarea[name="card-task"]').val();
+    let cardDate = $('input[name="card-date"]').val();
 
-    console.log(datepickerDate);
+  localStorage.setItem(`${cardId}_title`, `${cardTitle}`);
+  localStorage.setItem(`${cardId}_task`, `${cardTask}`);
+  localStorage.setItem(`${cardId}_date`, `${cardDate}`);
+  
+  console.log(localStorage);
 
-  }
-
-  function editCardContent(newContent) {
-    event.preventDefault();
-    let newCardTitle = $('input[name="cardContent"]').val(newContent);
-    console.log(newCardTitle);
+  $(`#${cardId} .cards-content`).text(cardTitle);
+  
   }
 
   /* ============== Metoder för att hantera listor nedan ============== */
@@ -158,14 +174,15 @@ const jtrello = (function () {
         items: "> li",
         connectWith: '.list-cards'
       });
+      
       clonedList.find('.list-header > button.delete').on('click', deleteList);
       clonedList.find('.cards > .cards-content').on('click', editCard);
       clonedList.find('form.new-card').on('click', createCard)
-      clonedList.find('.cards > button.delete').on('click', deleteCard);
-
+      clonedList.find('.cards').remove();
+      
       clonedList.insertBefore(DOM.$board.find('.column').last());
 
-      jtrello.setCardId();
+      cardIdentifier();
     }
   }
 
@@ -236,3 +253,4 @@ const jtrello = (function () {
 $("document").ready(function () {
   jtrello.init();
 });
+

@@ -136,6 +136,7 @@ input {
 }
 
 .ui-dialog {
+  min-width: 600px;
   background: #949494;
   border-radius: 3px;
   padding: 10px;
@@ -144,12 +145,14 @@ input {
 }
 
 .ui-dialog .ui-dialog-titlebar {
+  display: none;
   background: #757575;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 .ui-dialog .ui-dialog-titlebar-close {
+  display: none;
   padding: 10px;
   background: black;
   
@@ -219,3 +222,4 @@ input {
 background-color:white;
 color: rgb(0, 0, 0);
 }
+
