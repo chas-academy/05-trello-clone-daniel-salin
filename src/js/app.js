@@ -29,6 +29,7 @@ const jtrello = (function () {
     DOM.$deleteListButton = $('.list-header > button.delete');
 
     DOM.$datepickerSubmit = $('.datepickerBtn');
+    DOM.$editCardSubmit = $('.editCardBtn');
 
     DOM.$newCardForm = $('form.new-card');
     DOM.$deleteCardButton = $('.cards > button.delete');
@@ -37,6 +38,15 @@ const jtrello = (function () {
   function countColumns() {
     let array = $('.column');
     return array.length - 1;
+  }
+
+  // Set an id for each card
+  function cardIdentifier() {
+    for(let i = 0; i <= DOM.$cards.length-1; i++){
+      $(DOM.$cards[i]).attr({
+              id: i+1
+            });;
+    }
   }
 
   function createTabs() {
@@ -93,6 +103,12 @@ const jtrello = (function () {
   }
 
   function editCard() {
+    $('input[name="cardContent"]').val();
+    
+    let x = $(this).parent().find('.cards-content').text();
+    $('#cardDialog').find('#content .new-card input').val(x);
+    
+    // let dialogData =($('#cardDialog').find('#content .new-card input').val());
     $('#cardDialog').dialog('open');
   }
 
@@ -103,23 +119,30 @@ const jtrello = (function () {
   function bindEvents() {
     DOM.$newListButton.on('click', createList);
     DOM.$deleteListButton.on('click', deleteList);
-    DOM.$datepickerSubmit.on('click', datepickerSubmit);
+    DOM.$datepickerSubmit.on('click', setDeadline);
     DOM.$editCards.on('click', editCard);
+    DOM.$editCardSubmit.on('click', editCardContent);
 
     DOM.$newCardForm.on('submit', createCard);
     DOM.$deleteCardButton.on('click', deleteCard);
   }
 
-
-  /* ============== Metoder för att hantera jQuery UI widgets nedan ============== */
-  function datepickerSubmit() {
+  /* ============== Metoder för att hantera edit card dialog data nedan ============== */
+  function setDeadline() {
     event.preventDefault();
     let datepickerDate = $('input[name="cardDate"]').val();
+
     console.log(datepickerDate);
+
+  }
+
+  function editCardContent(newContent) {
+    event.preventDefault();
+    let newCardTitle = $('input[name="cardContent"]').val(newContent);
+    console.log(newCardTitle);
   }
 
   /* ============== Metoder för att hantera listor nedan ============== */
-  // Denna metod 
   function createList() {
     event.preventDefault();
     let count = jtrello.countColumns();
@@ -141,6 +164,8 @@ const jtrello = (function () {
       clonedList.find('.cards > button.delete').on('click', deleteCard);
 
       clonedList.insertBefore(DOM.$board.find('.column').last());
+
+      jtrello.setCardId();
     }
   }
 
@@ -156,14 +181,17 @@ const jtrello = (function () {
 
   /* =========== Metoder för att hantera kort i listor nedan =========== */
   function createCard(event) {
+    
     event.preventDefault();
 
-    let x = $(this).closest('.list-cards').children('.cards');
-
-    let newCard = $(`<li class="cards my-3">
-    <div class="cards-content"> New Card</div>
+    let currentCardId = $('.cards').length+1;
+    
+    let cardTitle = $(this).find('input[name="title"]').val();
+    let newCard = $(`
+    <li id="${currentCardId}" class="cards my-3">
+    <div class="cards-content"> Card #${currentCardId}: ${cardTitle} </div>
     <button class="button delete">X</button>
-</li>`);
+    </li>`);
     newCard.sortable({
       items: "> li",
       connectWith: ".list-cards"
@@ -178,8 +206,6 @@ const jtrello = (function () {
     event.preventDefault();
     $(this).closest('.cards').remove();
   }
-
-
 
   // Metod för att rita ut element i DOM:en
   function render() {}
@@ -196,12 +222,13 @@ const jtrello = (function () {
     makeSortable();
     createDatepicker();
     bindEvents();
+    cardIdentifier();
   }
 
   // All kod här
   return {
     init: init,
-    countColumns: countColumns
+    countColumns: countColumns,
   };
 })();
 

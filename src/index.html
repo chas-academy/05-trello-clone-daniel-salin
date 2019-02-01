@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
     <title>jQuery UI - Trello Clone (yay!)</title>
 </head>
+
 <body>
     <div class="board">
         <div class="column">
@@ -24,9 +27,7 @@
                         </form>
                     </li>
                     <li class="cards my-3">
-                        <div class="cards-content">
-                            New Card
-                        </div>
+                        <span class="cards-content">Card #1</span>
                         <button class="button delete">X</button>
                     </li>
                 </ul>
@@ -46,9 +47,7 @@
                         </form>
                     </li>
                     <li class="cards my-3">
-                            <div class="cards-content">
-                                Card #3
-                                </div>
+                        <span class="cards-content">Card #2</span>
                         <button class="button delete">X</button>
                     </li>
                 </ul>
@@ -68,9 +67,7 @@
                         </form>
                     </li>
                     <li class="cards my-3">
-                            <div class="cards-content">
-                                    Card #4
-                                    </div>
+                        <span class="cards-content">Card #3</span>
                         <button class="button delete">X</button>
                     </li>
                 </ul>
@@ -79,39 +76,43 @@
         <div class="column">
             <button id="new-list" class="button">Add new list</button>
             <div id="list-creation-dialog" title="Create new list" style="height: 40px">
-                    <form> 
-                        <input type="text" name="title" placeholder="List title" />
-                    </form>
-                </div>
+                <form>
+                    <input type="text" name="title" placeholder="List title" />
+                </form>
+            </div>
         </div>
     </div>
-            <div id="cardDialog">
-                <div id="tabs">
-                <ul>
-                    <li><a href="#date">Set Date</a></li>
-                    <li><a href="#content">Edit Content</a></li>
-                </ul>
-                <div id="date">
-                    <h2>Edit Date</h2>
-                    <form class="set-date" action="index.html">
-                            <input class="datepick" type="text" name="cardDate" placeholder="Chose date" />
-                            <button type="submit" class="datepickerBtn button add">Date</button>
-                        </form>
-                    
-                </div>
-                <div id="content">
-                    <h2>Edit Content</h2>
-                    <form class="new-card" action="index.html">
-                            <input type="text" name="cardContent" placeholder="Enter Task" />
-                            <button type="submit" class="button add">Enter Task</button>
-                        </form>
-                </div>
-            </div>
-            </div>
+    <div id="cardDialog">
+        <div id="tabs">
+            <ul>
+                <li><a href="#date">Set Date</a></li>
+                <li><a href="#content">Edit Content</a></li>
+            </ul>
+            <div id="date">
+                <h2>Edit Date</h2>
+                <form class="set-date" action="index.html">
+                    <input class="datepick" type="text" name="cardDate" placeholder="Chose date" />
+                    <button type="submit" class="datepickerBtn button add">Date</button>
+                </form>
 
-   
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+            </div>
+            <div id="content">
+                <h2>Edit Content</h2>
+                <form class="new-card" action="index.html">
+                    <input type="text" name="cardContent" value="test" placeholder="Enter Task" />
+                    <button type="submit" class="editCardBtn button add">Enter Task</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
