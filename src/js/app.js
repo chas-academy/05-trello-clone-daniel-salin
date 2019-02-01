@@ -23,6 +23,7 @@ const jtrello = (function () {
     DOM.$columns = $('.column');
     DOM.$lists = $('.list');
     DOM.$cards = $('.cards');
+    DOM.$editCards = $('.cards > .cards-content');
 
     DOM.$newListButton = $('button#new-list');
     DOM.$deleteListButton = $('.list-header > button.delete');
@@ -96,6 +97,10 @@ const jtrello = (function () {
     });
   }
 
+  function editCard() {
+    $('#cardDialog').dialog('open');
+  }
+
   /*
    *  Denna metod kommer nyttja variabeln DOM för att binda eventlyssnare till
    *  createList, deleteList, createCard och deleteCard etc.
@@ -104,6 +109,7 @@ const jtrello = (function () {
     DOM.$newListButton.on('click', createList);
     DOM.$deleteListButton.on('click', deleteList);
     DOM.$datepickerSubmit.on('click', datepickerSubmit);
+    DOM.$editCards.on('click', editCard);
 
     DOM.$newCardForm.on('submit', createCard);
     DOM.$deleteCardButton.on('click', deleteCard);
@@ -118,6 +124,7 @@ const jtrello = (function () {
   }
 
   /* ============== Metoder för att hantera listor nedan ============== */
+  // Denna metod 
   function createList() {
     event.preventDefault();
     let count = jtrello.countColumns();
@@ -127,12 +134,17 @@ const jtrello = (function () {
     } else {
       let clonedList = DOM.$columns.last().prev().clone(false, false);
       clonedList.show();
+
+      // Bind events och sortable
       clonedList.find('.list-cards').sortable({
         connectWith: '.list-cards'
       });
-      clonedList.find('.delete').on('click', deleteList);
+      clonedList.find('.list-header > button.delete').on('click', deleteList);
+      clonedList.find('.cards > .cards-content').on('click', editCard);
+      clonedList.find('form.new-card').on('click', createCard)
+      clonedList.find('.cards > button.delete').on('click', deleteCard);
+      
       clonedList.insertBefore(DOM.$board.find('.column').last());
-      jtrello.countColumns();
     }
   }
 
@@ -149,7 +161,19 @@ const jtrello = (function () {
   /* =========== Metoder för att hantera kort i listor nedan =========== */
   function createCard(event) {
     event.preventDefault();
-    console.log("This should create a new card");
+    let newCard = $(`<li class="cards my-3">
+    <div class="cards-content"> New Card</div>
+    <button class="button delete">X</button>
+</li>`
+);
+    newCard.sortable({
+      connectWith: ".list-cards"
+    });
+    
+    newCard.find('.cards-content').on('click', editCard);
+    newCard.find('.button.delete').on('click', deleteCard);
+    newCard.appendTo($(this).closest('.list-cards'));
+
   }
 
   function deleteCard() {
