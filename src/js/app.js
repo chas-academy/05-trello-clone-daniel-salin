@@ -36,7 +36,6 @@ const jtrello = (function () {
 
   function countColumns() {
     let array = $('.column');
-    console.log(array.length);
     return array.length - 1;
   }
 
@@ -84,16 +83,12 @@ const jtrello = (function () {
     });
   }
 
-  function sortCards() {
+  function makeSortable() {
     $('.list-cards').sortable({
       connectWith: ".list-cards"
     });
-  }
-
-  function sortLists() {
     $('.board').sortable({
-      axis: "x",
-      dropOnEmpty: true
+      axis: "x"
     });
   }
 
@@ -137,13 +132,14 @@ const jtrello = (function () {
 
       // Bind events och sortable
       clonedList.find('.list-cards').sortable({
+        items: "> li",
         connectWith: '.list-cards'
       });
       clonedList.find('.list-header > button.delete').on('click', deleteList);
       clonedList.find('.cards > .cards-content').on('click', editCard);
       clonedList.find('form.new-card').on('click', createCard)
       clonedList.find('.cards > button.delete').on('click', deleteCard);
-      
+
       clonedList.insertBefore(DOM.$board.find('.column').last());
     }
   }
@@ -161,24 +157,29 @@ const jtrello = (function () {
   /* =========== Metoder för att hantera kort i listor nedan =========== */
   function createCard(event) {
     event.preventDefault();
+
+    let x = $(this).closest('.list-cards').children('.cards');
+
     let newCard = $(`<li class="cards my-3">
     <div class="cards-content"> New Card</div>
     <button class="button delete">X</button>
-</li>`
-);
+</li>`);
     newCard.sortable({
+      items: "> li",
       connectWith: ".list-cards"
     });
-    
+
     newCard.find('.cards-content').on('click', editCard);
     newCard.find('.button.delete').on('click', deleteCard);
     newCard.appendTo($(this).closest('.list-cards'));
-
   }
 
   function deleteCard() {
-    console.log("This should delete the card you clicked on");
+    event.preventDefault();
+    $(this).closest('.cards').remove();
   }
+
+
 
   // Metod för att rita ut element i DOM:en
   function render() {}
@@ -192,8 +193,7 @@ const jtrello = (function () {
     captureDOMEls();
     createTabs();
     createDialogs();
-    sortCards();
-    sortLists();
+    makeSortable();
     createDatepicker();
     bindEvents();
   }
