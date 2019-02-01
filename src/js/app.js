@@ -27,36 +27,60 @@ const jtrello = (function () {
     DOM.$newListButton = $('button#new-list');
     DOM.$deleteListButton = $('.list-header > button.delete');
 
+    DOM.$datepickerSubmit = $('.datepickerBtn');
+
     DOM.$newCardForm = $('form.new-card');
     DOM.$deleteCardButton = $('.cards > button.delete');
   }
 
-function _restrictCol() {
-  let array = $('.column');
-  console.log(array.length);
-  return array.length-1;
-}
+  function countColumns() {
+    let array = $('.column');
+    console.log(array.length);
+    return array.length - 1;
+  }
 
+  function createTabs() {
+    let cardDialogTabs = $('#tabs');
+    cardDialogTabs.tabs();
+  }
 
-  function createTabs() {}
+  function createDatepicker() {
+    let datepickerInput = $('.datepick');
+    datepickerInput.datepicker();
+  }
 
   function createDialogs() {
-    let maxLists = $('<div id="maxBoardsDialog"><span>Only 5 boards at a time</span></div>');
+    let maxLists = $(`<div id="maxBoardsDialog"><span>Only 5 boards at a time</span></div>`);
     maxLists.dialog({
       modal: true,
       autoOpen: false,
       show: {
-          effect: 'bounce',
-          times: 5,
-          duration: 1000,
-          distance: 300
+        effect: 'bounce',
+        times: 5,
+        duration: 1000,
+        distance: 300
       },
       hide: {
-          effect: 'explode',
-          duration: 1000
-      }    
-  });
+        effect: 'explode',
+        duration: 1000
+      }
+    });
 
+    let cardDialog = $('#cardDialog');
+    cardDialog.dialog({
+      modal: true,
+      autoOpen: false,
+      show: {
+        effect: 'bounce',
+        times: 5,
+        duration: 1000,
+        distance: 300
+      },
+      hide: {
+        effect: 'explode',
+        duration: 1000
+      }
+    });
   }
 
   function sortCards() {
@@ -79,32 +103,43 @@ function _restrictCol() {
   function bindEvents() {
     DOM.$newListButton.on('click', createList);
     DOM.$deleteListButton.on('click', deleteList);
+    DOM.$datepickerSubmit.on('click', datepickerSubmit);
 
     DOM.$newCardForm.on('submit', createCard);
     DOM.$deleteCardButton.on('click', deleteCard);
   }
 
+
+  /* ============== Metoder för att hantera jQuery UI widgets nedan ============== */
+  function datepickerSubmit() {
+    event.preventDefault();
+    let datepickerDate = $('input[name="cardDate"]').val();
+    console.log(datepickerDate);
+  }
+
   /* ============== Metoder för att hantera listor nedan ============== */
   function createList() {
     event.preventDefault();
-    let count = jtrello.test();
-    if(count >= 5) {
-      $('')
-      
+    let count = jtrello.countColumns();
+    if (count >= 5) {
+      $('#maxBoardsDialog').dialog('open');
+
     } else {
-      let clonedList = DOM.$columns.last().prev().clone(false, false); 
+      let clonedList = DOM.$columns.last().prev().clone(false, false);
       clonedList.show();
-      clonedList.find('.list-cards').sortable({connectWith: '.list-cards'});
+      clonedList.find('.list-cards').sortable({
+        connectWith: '.list-cards'
+      });
       clonedList.find('.delete').on('click', deleteList);
       clonedList.insertBefore(DOM.$board.find('.column').last());
-      jtrello.test();
+      jtrello.countColumns();
     }
   }
 
+  // Behåller en kolumn som clone-template i createList-metoden
   function deleteList() {
-    let count = jtrello.test()-1;
-    console.log(count);
-    if(count < 1) {
+    let count = jtrello.countColumns() - 1;
+    if (count < 1) {
       $(this).closest('.column').hide();
     } else {
       $(this).closest('.column').remove();
@@ -135,19 +170,18 @@ function _restrictCol() {
     createDialogs();
     sortCards();
     sortLists();
+    createDatepicker();
     bindEvents();
   }
 
   // All kod här
   return {
     init: init,
-    test: _restrictCol
-    
+    countColumns: countColumns
   };
 })();
 
 //usage
 $("document").ready(function () {
   jtrello.init();
-  jtrello.test();
 });
