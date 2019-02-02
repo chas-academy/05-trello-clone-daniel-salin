@@ -3,6 +3,51 @@ import $ from 'jquery';
 require('webpack-jquery-ui');
 import '../css/styles.css';
 
+// bgimage widget
+;($(function(){$.widget('daniel.bgimage', {
+  version: '0.0.1',
+
+  options: {
+      url1: 'https://images.unsplash.com/photo-1548687039-60e829a22f69?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2789&q=80',
+      url2: 'https://images.unsplash.com/photo-1548680307-fc476201267d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80',
+      url3: 'https://images.unsplash.com/photo-1548645933-5cfe71429909?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
+      url4: 'https://images.unsplash.com/photo-1548685913-70235e21eab2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1580&q=80',
+      url5: 'https://images.unsplash.com/photo-1531705829171-5c50027ccb82?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
+      url6: 'https://images.unsplash.com/photo-1447439312166-01a5f5edf9b0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
+      url7: 'https://images.unsplash.com/photo-1529997175804-0f8f8b602b4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1644&q=80',
+      url8: 'https://images.unsplash.com/photo-1506506280-1c41709551e7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1652&q=80',
+      url9: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Coffee-filter.jpg/1200px-Coffee-filter.jpg',
+      url10: 'https://www.wikihow.com/images/thumb/4/4e/Separate-Coffee-Filters-Step-1.jpg/aid30474-v4-728px-Separate-Coffee-Filters-Step-1.jpg'
+  },
+
+  _create: function () {
+      let url = this._selectImage();
+      this.element.css({
+          "backgroundImage": "url(" + url + ")",
+          "backgroundSize": "cover",
+          "opacity": "0.9"
+      })
+      .addClass('bgimage');
+  },
+
+  _selectImage: function() {
+      let image = [
+          this.options.url1,
+          this.options.url2,
+          this.options.url3,
+          this.options.url4,
+          this.options.url5,
+          this.options.url6,
+          this.options.url7,
+          this.options.url8,
+          this.options.url9,
+          this.options.url10
+      ];
+      let random = Math.floor(Math.random()*10);;
+      return image[random];
+  }
+})}));
+
 /**
  * jtrello
  * @return {Object} [Publikt tillgänliga metoder som vi exponerar]
@@ -115,8 +160,6 @@ const jtrello = (function () {
     $('#cardDialog').find('input[name="card-title"]').val(thisCardTitle);
     $('#cardDialog').find('textarea[name="card-task"]').val(thisCardTask);
     $('#cardDialog').find('input[name="card-date"]').val(thisCardDate);
-    
-
     
     // let dialogData =($('#cardDialog').find('#content .new-card input').val());
     $('#cardDialog').dialog('open');
@@ -252,5 +295,6 @@ const jtrello = (function () {
 //usage
 $("document").ready(function () {
   jtrello.init();
+  $('.list').bgimage({ url1: 'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?cs=srgb&dl=beauty-bloom-blue-67636.jpg&fm=jpg' });
 });
 
