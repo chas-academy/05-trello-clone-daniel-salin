@@ -8,7 +8,8 @@
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
         crossorigin="anonymous">
-    <title>jQuery UI - Trello Clone (yay!)</title>
+
+    <title>u05 - Trello Clone using jQUery, jQuery UI and bootstrap</title>
 </head>
 
 <body>
@@ -91,28 +92,35 @@
             <ul>
                 <li><a href="#info">Card Information</a></li>
                 <li><a href="#style">Change Card Style</a></li>
-                
+
             </ul>
             <div id="info">
 
                 <input type="hidden" name="card-id-content" value="">
                 <ul id="card-details">
                     <form class="new-card" action="index.html">
-                        <input type="hidden" name="card-id" value="">
+                        <input type="hidden" name="card-content-id" value="">
                         <li>Title:<input type="text" name="card-title" placeholder="Enter New Title" /></li>
-                        <li>Task:</li><textarea name="card-task" class="p-1"cols=60 placeholder="Enter New Task"></textarea>
+                        <li>Task:</li><textarea name="card-task" class="p-1" cols=60 placeholder="Enter New Task"></textarea>
                         <li>Deadline:<input type="text" name="card-date" class="datepick" placeholder="Chose date" /></li>
-                        <button type="submit" id="card-edit-btn" class="button add my-2">Submit changes</button>
+                        <button type="submit" id="card-edit-btn" class="btn btn-primary my-2">Submit changes</button>
                     </form>
                 </ul>
             </div>
             <div id="style">
-                <h2>Change Card Style</h2>
-               <div class="jumbotron">
-                
-               </div>
+                <form class="card-style" class="custom-control custom-switch" action="index.html">
+                    <div class="form-group">
+                            <input type="hidden" name="card-style-id" value="">
+                            <label for="bg-check form-text">Toggle Background Image On Current List</label>
+                            <input id="bg-check" name="bg-check" type="checkbox" value=""class="form-check">
+                        </div>
+                        <button type="submit" id="card-style-btn" class="btn btn-primary my-2">Submit Changes</button>
+                </form>
+                </div>
+
             </div>
         </div>
+    </div>
     </div>
 
 

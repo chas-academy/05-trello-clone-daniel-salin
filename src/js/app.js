@@ -45,7 +45,13 @@ import '../css/styles.css';
       ];
       let random = Math.floor(Math.random()*10);;
       return image[random];
+  },
+
+  _destroy: function() {
+    this.element.removeClass('.bgimage');
+    this.element.removeAttr('style');
   }
+
 })}));
 
 /**
@@ -75,6 +81,8 @@ const jtrello = (function () {
     DOM.$deleteListButton = $('.list-header > button.delete');
 
     DOM.$editCardSubmit = $('#card-edit-btn');
+
+    DOM.$editCardStyleSubmit = $('#card-style-btn');
 
     DOM.$newCardForm = $('form.new-card');
     DOM.$deleteCardButton = $('.cards > button.delete');
@@ -156,7 +164,9 @@ const jtrello = (function () {
     let thisCardTask= localStorage.getItem(`${thisCardId}_task`);
     let thisCardDate = localStorage.getItem(`${thisCardId}_date`);
     
-    $('#cardDialog').find('input[name="card-id"]').val(thisCardId);
+    $('#cardDialog').find('input[name="card-content-id"]').val(thisCardId);
+    $('#cardDialog').find('input[name="card-style-id"]').val(thisCardId);
+
     $('#cardDialog').find('input[name="card-title"]').val(thisCardTitle);
     $('#cardDialog').find('textarea[name="card-task"]').val(thisCardTask);
     $('#cardDialog').find('input[name="card-date"]').val(thisCardDate);
@@ -173,6 +183,8 @@ const jtrello = (function () {
     DOM.$newListButton.on('click', createList);
     DOM.$deleteListButton.on('click', deleteList);
     DOM.$editCards.on('click', editCard);
+
+    DOM.$editCardStyleSubmit.on('click', toggleBackgroundImage);
     
     DOM.$editCardSubmit.on('click', editCardContent);
     DOM.$closeDialogButton.on('click', closeDialog);
@@ -186,7 +198,7 @@ const jtrello = (function () {
 // Den här funktionen skriver lagrar förändringar i kortens data i localstorage
   function editCardContent() {
     event.preventDefault();
-    let cardId = $('input[name="card-id"]').val();
+    let cardId = $('input[name="card-content-id"]').val();
     let cardTitle = $('input[name="card-title"]').val();
     let cardTask = $('textarea[name="card-task"]').val();
     let cardDate = $('input[name="card-date"]').val();
@@ -198,7 +210,16 @@ const jtrello = (function () {
   console.log(localStorage);
 
   $(`#${cardId} .cards-content`).text(cardTitle);
-  
+  }
+
+  function toggleBackgroundImage() {
+    event.preventDefault();
+    let cardId = $('input[name="card-style-id"]').val();
+    if($('#bg-check').is(':checked')) {
+      $(`#${cardId}`).closest('.list').bgimage();
+    } else {
+      $(`#${cardId}`).closest('.list').bgimage("destroy");
+    }
   }
 
   /* ============== Metoder för att hantera listor nedan ============== */
@@ -295,6 +316,5 @@ const jtrello = (function () {
 //usage
 $("document").ready(function () {
   jtrello.init();
-  $('.list').bgimage({ url1: 'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?cs=srgb&dl=beauty-bloom-blue-67636.jpg&fm=jpg' });
 });
 

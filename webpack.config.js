@@ -5,6 +5,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const devMode = process.env.NODE_ENV !== 'production'
 
+// ...
+
+
 module.exports = {
   entry: {
     index:'./src/js/app.js'
@@ -44,14 +47,18 @@ module.exports = {
         "window.jQuery": "jquery'",
         "window.$": "jquery"
     }),
-    new MiniCssExtractPlugin({
-      filename: devMode ? 'css/[name].css' : 'css/[name].[hash].css',
-      chunkFilename: devMode ? 'css/[id].css' : 'css/[id].[hash].css'
-    })
-  ],
+  new MiniCssExtractPlugin({
+    filename: devMode ? 'css/[name].css' : 'css/[name].[hash].css',
+    chunkFilename: devMode ? 'css/[id].css' : 'css/[id].[hash].css'
+}),
+new webpack.HotModuleReplacementPlugin()
+],
   devServer: {
+    hot: true,
     contentBase: path.join(__dirname, 'public'),
+    publicPath: '/',
     compress: true,
     port: 3000
   }
 };
+
