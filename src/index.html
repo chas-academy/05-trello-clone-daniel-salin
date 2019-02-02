@@ -32,7 +32,7 @@
         <div class="column">
             <div class="list">
                 <div class="list-header">
-                    Todo
+                    <span>Todo</span>
                     <button class="button delete">X</button>
                 </div>
                 <ul class="list-cards">
@@ -52,7 +52,7 @@
         <div class="column">
             <div class="list">
                 <div class="list-header">
-                    Doing
+                    <span>Doing</span>
                     <button class="button delete">X</button>
                 </div>
                 <ul class="list-cards">
@@ -72,7 +72,7 @@
         <div class="column">
             <div class="list">
                 <div class="list-header">
-                    Done
+                    <span>Done</span> 
                     <button class="button delete">X</button>
                 </div>
                 <ul class="list-cards">
@@ -94,10 +94,10 @@
             <header class="d-flex justify-content-end">
                 <button class="close-dialog btn btn-sm btn-danger">X</button>
             </header>
-            <button id="new-list" class="button">Add new list</button>
             <div id="list-creation-dialog" title="Create new list" style="height: 40px">
-                <form>
-                    <input type="text" name="title" placeholder="List title" />
+                    <form>
+                        <input type="text" name="list-title" placeholder="List title" />
+                        <button id="new-list" class="button">Add new list</button>
                 </form>
             </div>
         </div>

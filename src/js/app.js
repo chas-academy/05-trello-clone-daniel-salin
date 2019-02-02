@@ -251,8 +251,6 @@ function motivateDialog() {
     localStorage.setItem(`${cardId}_task`, `${cardTask}`);
     localStorage.setItem(`${cardId}_date`, `${cardDate}`);
 
-    console.log(localStorage);
-
     $(`#${cardId} .cards-content`).text(cardTitle);
   }
 
@@ -269,11 +267,13 @@ function motivateDialog() {
   /* ============== Metoder för att hantera listor nedan ============== */
   function createList() {
     event.preventDefault();
+    let newListTitle = $('input[name="list-title"').val();
+
     let count = jtrello.countColumns();
     if (count >= 10) {
       $('#maxBoardsDialog').dialog('open');
-
     } else {
+
       let clonedList = DOM.$columns.last().prev().clone(false, false);
       clonedList.show();
 
@@ -285,19 +285,18 @@ function motivateDialog() {
 
       clonedList.find('.list-header > button.delete').on('click', deleteList);
       clonedList.find('.cards > .cards-content').on('click', editCard);
-      clonedList.find('form.new-card').on('click', createCard)
+      clonedList.find('form.new-card').on('click', createCard);
+      clonedList.find('.list-header span').text(newListTitle);
       clonedList.find('.cards').remove();
 
       clonedList.insertAfter(DOM.$board.find('.column').last());
-
-      cardIdentifier();
     }
   }
 
   // Behåller en kolumn som clone-template i createList-metoden
   function deleteList() {
-    let count = jtrello.countColumns() - 1;
-    if (count < 1) {
+    let count = jtrello.countColumns();
+    if (count <= 1) {
       $(this).closest('.column').hide();
     } else {
       $(this).closest('.column').remove();
