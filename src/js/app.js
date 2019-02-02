@@ -4,10 +4,12 @@ require('webpack-jquery-ui');
 import '../css/styles.css';
 
 // bgimage widget
-;($(function(){$.widget('daniel.bgimage', {
-  version: '0.0.1',
+;
+($(function () {
+  $.widget('daniel.bgimage', {
+    version: '0.0.1',
 
-  options: {
+    options: {
       url1: 'https://images.unsplash.com/photo-1548687039-60e829a22f69?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2789&q=80',
       url2: 'https://images.unsplash.com/photo-1548680307-fc476201267d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80',
       url3: 'https://images.unsplash.com/photo-1548645933-5cfe71429909?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
@@ -18,41 +20,42 @@ import '../css/styles.css';
       url8: 'https://images.unsplash.com/photo-1506506280-1c41709551e7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1652&q=80',
       url9: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Coffee-filter.jpg/1200px-Coffee-filter.jpg',
       url10: 'https://www.wikihow.com/images/thumb/4/4e/Separate-Coffee-Filters-Step-1.jpg/aid30474-v4-728px-Separate-Coffee-Filters-Step-1.jpg'
-  },
+    },
 
-  _create: function () {
+    _create: function () {
       let url = this._selectImage();
       this.element.css({
           "backgroundImage": "url(" + url + ")",
           "backgroundSize": "cover",
           "opacity": "0.9"
-      })
-      .addClass('bgimage');
-  },
+        })
+        .addClass('bgimage');
+    },
 
-  _selectImage: function() {
+    _selectImage: function () {
       let image = [
-          this.options.url1,
-          this.options.url2,
-          this.options.url3,
-          this.options.url4,
-          this.options.url5,
-          this.options.url6,
-          this.options.url7,
-          this.options.url8,
-          this.options.url9,
-          this.options.url10
+        this.options.url1,
+        this.options.url2,
+        this.options.url3,
+        this.options.url4,
+        this.options.url5,
+        this.options.url6,
+        this.options.url7,
+        this.options.url8,
+        this.options.url9,
+        this.options.url10
       ];
-      let random = Math.floor(Math.random()*10);;
+      let random = Math.floor(Math.random() * 10);;
       return image[random];
-  },
+    },
 
-  _destroy: function() {
-    this.element.removeClass('.bgimage');
-    this.element.removeAttr('style');
-  }
+    _destroy: function () {
+      this.element.removeClass('.bgimage');
+      this.element.removeAttr('style');
+    }
 
-})}));
+  })
+}));
 
 /**
  * jtrello
@@ -75,14 +78,17 @@ const jtrello = (function () {
     DOM.$lists = $('.list');
     DOM.$cards = $('.cards');
     DOM.$editCards = $('.cards > .cards-content');
-    DOM.$closeDialogButton = $('#close-dialog');
+    DOM.$closeDialogButton = $('.close-dialog');
 
+    DOM.$motivateButton = $('button#motivate');
+
+    DOM.$newListDialogButton = $('button#new-list-dialog');
     DOM.$newListButton = $('button#new-list');
     DOM.$deleteListButton = $('.list-header > button.delete');
 
     DOM.$editCardSubmit = $('#card-edit-btn');
 
-    DOM.$editCardStyleSubmit = $('#card-style-btn');
+    DOM.$editCardStyleSubmit = $('#card-style-btn');
 
     DOM.$newCardForm = $('form.new-card');
     DOM.$deleteCardButton = $('.cards > button.delete');
@@ -95,12 +101,19 @@ const jtrello = (function () {
 
   // Set an id for each card
   function cardIdentifier() {
-    for(let i = 0; i <= DOM.$cards.length-1; i++){
+    for (let i = 0; i <= DOM.$cards.length - 1; i++) {
       $(DOM.$cards[i]).attr({
-              id: i+1
-            });;
+        id: i + 1
+      });;
     }
   }
+
+function motivateDialog() {
+  $('#motivateDialog').dialog('open');
+}
+  function newListDialog() {
+  $('#listDialog').dialog('open');
+}
 
   function createTabs() {
     let cardDialogTabs = $('#tabs');
@@ -113,19 +126,31 @@ const jtrello = (function () {
   }
 
   function createDialogs() {
-    let maxLists = $(`<div id="maxBoardsDialog"><span>Only 5 boards at a time</span></div>`);
+    let maxLists = $('maxBoardsDialog');
     maxLists.dialog({
       modal: true,
       autoOpen: false,
       show: {
-        effect: 'bounce',
-        times: 5,
-        duration: 1000,
-        distance: 300
+        effect: 'explode',
+        duration: 100
       },
       hide: {
         effect: 'explode',
-        duration: 1000
+        duration: 100
+      }
+    });
+
+    let motivate = $('#motivateDialog');
+    motivate.dialog({
+      modal: true,
+      autoOpen: false,
+      show: {
+        effect: 'explode',
+        duration: 100
+      },
+      hide: {
+        effect: 'explode',
+        duration: 100
       }
     });
 
@@ -142,10 +167,27 @@ const jtrello = (function () {
         duration: 100
       }
     });
+
+    let listDialog = $('#listDialog');
+    listDialog.dialog({
+      modal: true,
+      autoOpen: false,
+      show: {
+        effect: 'explode',
+        duration: 100
+      },
+      hide: {
+        effect: 'explode',
+        duration: 100
+      }
+    });
+
   }
 
   function closeDialog() {
     $('#cardDialog').dialog('close');
+    $('#listDialog').dialog('close');
+    $('#motivateDialog').dialog('close');
   }
 
   function makeSortable() {
@@ -159,18 +201,18 @@ const jtrello = (function () {
 
   function editCard() {
     let thisCardId = $(this).closest('.cards').attr('id');
-    
+
     let thisCardTitle = localStorage.getItem(`${thisCardId}_title`);
-    let thisCardTask= localStorage.getItem(`${thisCardId}_task`);
+    let thisCardTask = localStorage.getItem(`${thisCardId}_task`);
     let thisCardDate = localStorage.getItem(`${thisCardId}_date`);
-    
+
     $('#cardDialog').find('input[name="card-content-id"]').val(thisCardId);
     $('#cardDialog').find('input[name="card-style-id"]').val(thisCardId);
 
     $('#cardDialog').find('input[name="card-title"]').val(thisCardTitle);
     $('#cardDialog').find('textarea[name="card-task"]').val(thisCardTask);
     $('#cardDialog').find('input[name="card-date"]').val(thisCardDate);
-    
+
     // let dialogData =($('#cardDialog').find('#content .new-card input').val());
     $('#cardDialog').dialog('open');
   }
@@ -180,12 +222,14 @@ const jtrello = (function () {
    *  createList, deleteList, createCard och deleteCard etc.
    */
   function bindEvents() {
+    DOM.$newListDialogButton.on('click', newListDialog);
     DOM.$newListButton.on('click', createList);
     DOM.$deleteListButton.on('click', deleteList);
     DOM.$editCards.on('click', editCard);
 
     DOM.$editCardStyleSubmit.on('click', toggleBackgroundImage);
-    
+    DOM.$motivateButton.on('click', motivateDialog);
+
     DOM.$editCardSubmit.on('click', editCardContent);
     DOM.$closeDialogButton.on('click', closeDialog);
 
@@ -194,8 +238,8 @@ const jtrello = (function () {
   }
 
   /* ============== Metoder för att hantera edit card dialog data nedan ============== */
-  
-// Den här funktionen skriver lagrar förändringar i kortens data i localstorage
+
+  // Den här funktionen skriver lagrar förändringar i kortens data i localstorage
   function editCardContent() {
     event.preventDefault();
     let cardId = $('input[name="card-content-id"]').val();
@@ -203,19 +247,19 @@ const jtrello = (function () {
     let cardTask = $('textarea[name="card-task"]').val();
     let cardDate = $('input[name="card-date"]').val();
 
-  localStorage.setItem(`${cardId}_title`, `${cardTitle}`);
-  localStorage.setItem(`${cardId}_task`, `${cardTask}`);
-  localStorage.setItem(`${cardId}_date`, `${cardDate}`);
-  
-  console.log(localStorage);
+    localStorage.setItem(`${cardId}_title`, `${cardTitle}`);
+    localStorage.setItem(`${cardId}_task`, `${cardTask}`);
+    localStorage.setItem(`${cardId}_date`, `${cardDate}`);
 
-  $(`#${cardId} .cards-content`).text(cardTitle);
+    console.log(localStorage);
+
+    $(`#${cardId} .cards-content`).text(cardTitle);
   }
 
   function toggleBackgroundImage() {
     event.preventDefault();
     let cardId = $('input[name="card-style-id"]').val();
-    if($('#bg-check').is(':checked')) {
+    if ($('#bg-check').is(':checked')) {
       $(`#${cardId}`).closest('.list').bgimage();
     } else {
       $(`#${cardId}`).closest('.list').bgimage("destroy");
@@ -226,7 +270,7 @@ const jtrello = (function () {
   function createList() {
     event.preventDefault();
     let count = jtrello.countColumns();
-    if (count >= 5) {
+    if (count >= 10) {
       $('#maxBoardsDialog').dialog('open');
 
     } else {
@@ -238,13 +282,13 @@ const jtrello = (function () {
         items: "> li",
         connectWith: '.list-cards'
       });
-      
+
       clonedList.find('.list-header > button.delete').on('click', deleteList);
       clonedList.find('.cards > .cards-content').on('click', editCard);
       clonedList.find('form.new-card').on('click', createCard)
       clonedList.find('.cards').remove();
-      
-      clonedList.insertBefore(DOM.$board.find('.column').last());
+
+      clonedList.insertAfter(DOM.$board.find('.column').last());
 
       cardIdentifier();
     }
@@ -262,11 +306,11 @@ const jtrello = (function () {
 
   /* =========== Metoder för att hantera kort i listor nedan =========== */
   function createCard(event) {
-    
+
     event.preventDefault();
 
-    let currentCardId = $('.cards').length+1;
-    
+    let currentCardId = $('.cards').length + 1;
+
     let cardTitle = $(this).find('input[name="title"]').val();
     let newCard = $(`
     <li id="${currentCardId}" class="cards my-3">
@@ -317,4 +361,3 @@ const jtrello = (function () {
 $("document").ready(function () {
   jtrello.init();
 });
-

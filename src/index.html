@@ -12,7 +12,22 @@
     <title>u05 - Trello Clone using jQUery, jQuery UI and bootstrap</title>
 </head>
 
-<body>
+<body class="bg-dark">
+    <header class="container-fluid mb-0 mx-0 bg-light">
+        <div class="row">
+            <h1 class="p-0 m-3">trelloClone</h1>
+        </div>
+    </header>
+    <nav>
+        <ul class="nav justify-content-left p-2 mt-0">
+            <li class="nav-item">
+                <button id="new-list-dialog" class="btn btn-light">Add new list</button>
+            </li>
+            <li class="nav-item mx-1">
+                <button id="motivate" class="btn btn-light">Motivate me</button>
+            </li>
+        </ul>
+    </nav>
     <div class="board">
         <div class="column">
             <div class="list">
@@ -75,7 +90,10 @@
                 </ul>
             </div>
         </div>
-        <div class="column">
+        <div id="listDialog">
+            <header class="d-flex justify-content-end">
+                <button class="close-dialog btn btn-sm btn-danger">X</button>
+            </header>
             <button id="new-list" class="button">Add new list</button>
             <div id="list-creation-dialog" title="Create new list" style="height: 40px">
                 <form>
@@ -86,13 +104,12 @@
     </div>
     <div id="cardDialog">
         <header class="d-flex justify-content-end">
-            <button id="close-dialog" class="btn btn-sm btn-danger">X</button>
+            <button class="close-dialog btn btn-sm btn-danger">X</button>
         </header>
         <div id="tabs">
             <ul>
                 <li><a href="#info">Card Information</a></li>
-                <li><a href="#style">Change Card Style</a></li>
-
+                <li><a href="#style">Edit Style</a></li>
             </ul>
             <div id="info">
 
@@ -110,16 +127,28 @@
             <div id="style">
                 <form class="card-style" class="custom-control custom-switch" action="index.html">
                     <div class="form-group">
-                            <input type="hidden" name="card-style-id" value="">
-                            <label for="bg-check form-text">Toggle Background Image On Current List</label>
-                            <input id="bg-check" name="bg-check" type="checkbox" value=""class="form-check">
-                        </div>
-                        <button type="submit" id="card-style-btn" class="btn btn-primary my-2">Submit Changes</button>
+                        <input type="hidden" name="card-style-id" value="">
+                        <label for="bg-check form-text">Toggle Background Image On Current List</label>
+                        <input id="bg-check" name="bg-check" type="checkbox" value="" class="form-check">
+                    </div>
+                    <button type="submit" id="card-style-btn" class="btn btn-primary my-2">Submit Changes</button>
                 </form>
-                </div>
-
             </div>
         </div>
+    </div>
+    <div id="maxBoardsDialog">
+        <header class="d-flex justify-content-end">
+            <button class="close-dialog btn btn-sm btn-danger">X</button>
+        </header>
+        <span>Do you really need more than 10 boards at a time?</span>
+    </div>
+    <div id="motivateDialog">
+        <header class="d-flex justify-content-end">
+            <button class="close-dialog btn btn-sm btn-danger">X</button>
+        </header>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/KxGRhd_iWuE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+    </div>
     </div>
     </div>
 

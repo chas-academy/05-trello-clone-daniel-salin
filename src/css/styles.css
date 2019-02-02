@@ -1,10 +1,7 @@
 html,
 body {
-  background: #9999ff;
   margin: 0;
-  padding: 30px 0 0;
-  font-family: sans-serif;
-  color: #4d4d4d;
+  padding: 0;
 }
 
 a {
