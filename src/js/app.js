@@ -53,7 +53,6 @@ import '../css/styles.css';
       this.element.removeClass('.bgimage');
       this.element.removeAttr('style');
     }
-
   })
 }));
 
@@ -99,21 +98,30 @@ const jtrello = (function () {
     return array.length - 1;
   }
 
-  // Set an id for each card
+  // Set an data-card-id for each card
   function cardIdentifier() {
     for (let i = 0; i <= DOM.$cards.length - 1; i++) {
       $(DOM.$cards[i]).attr({
-        id: i + 1
+        'data-card-id': i + 1
+      });;
+    }
+  }
+  // Set an data-list-id for each list
+  function listIdentifier() {
+    for (let i = 0; i <= DOM.$lists.length - 1; i++) {
+      $(DOM.$lists[i]).attr({
+        'data-list-id': i + 1
       });;
     }
   }
 
-function motivateDialog() {
-  $('#motivateDialog').dialog('open');
-}
+  function motivateDialog() {
+    $('#motivateDialog').dialog('open');
+  }
+
   function newListDialog() {
-  $('#listDialog').dialog('open');
-}
+    $('#listDialog').dialog('open');
+  }
 
   function createTabs() {
     let cardDialogTabs = $('#tabs');
@@ -126,8 +134,7 @@ function motivateDialog() {
   }
 
   function createDialogs() {
-    let maxLists = $('maxBoardsDialog');
-    maxLists.dialog({
+    const dialogSettings = {
       modal: true,
       autoOpen: false,
       show: {
@@ -138,49 +145,19 @@ function motivateDialog() {
         effect: 'explode',
         duration: 100
       }
-    });
+    };
+
+    let maxLists = $('maxBoardsDialog');
+    maxLists.dialog(dialogSettings);
 
     let motivate = $('#motivateDialog');
-    motivate.dialog({
-      modal: true,
-      autoOpen: false,
-      show: {
-        effect: 'explode',
-        duration: 100
-      },
-      hide: {
-        effect: 'explode',
-        duration: 100
-      }
-    });
+    motivate.dialog(dialogSettings);
 
     let cardDialog = $('#cardDialog');
-    cardDialog.dialog({
-      modal: true,
-      autoOpen: false,
-      show: {
-        effect: 'explode',
-        duration: 100
-      },
-      hide: {
-        effect: 'explode',
-        duration: 100
-      }
-    });
+    cardDialog.dialog(dialogSettings);
 
     let listDialog = $('#listDialog');
-    listDialog.dialog({
-      modal: true,
-      autoOpen: false,
-      show: {
-        effect: 'explode',
-        duration: 100
-      },
-      hide: {
-        effect: 'explode',
-        duration: 100
-      }
-    });
+    listDialog.dialog(dialogSettings);
 
   }
 
@@ -200,7 +177,7 @@ function motivateDialog() {
   }
 
   function editCard() {
-    let thisCardId = $(this).closest('.cards').attr('id');
+    let thisCardId = $(this).closest('.cards').attr('data-card-id');
 
     let thisCardTitle = localStorage.getItem(`${thisCardId}_title`);
     let thisCardTask = localStorage.getItem(`${thisCardId}_task`);
@@ -208,12 +185,10 @@ function motivateDialog() {
 
     $('#cardDialog').find('input[name="card-content-id"]').val(thisCardId);
     $('#cardDialog').find('input[name="card-style-id"]').val(thisCardId);
-
     $('#cardDialog').find('input[name="card-title"]').val(thisCardTitle);
     $('#cardDialog').find('textarea[name="card-task"]').val(thisCardTask);
     $('#cardDialog').find('input[name="card-date"]').val(thisCardDate);
 
-    // let dialogData =($('#cardDialog').find('#content .new-card input').val());
     $('#cardDialog').dialog('open');
   }
 
@@ -225,21 +200,19 @@ function motivateDialog() {
     DOM.$newListDialogButton.on('click', newListDialog);
     DOM.$newListButton.on('click', createList);
     DOM.$deleteListButton.on('click', deleteList);
-    DOM.$editCards.on('click', editCard);
-
-    DOM.$editCardStyleSubmit.on('click', toggleBackgroundImage);
-    DOM.$motivateButton.on('click', motivateDialog);
-
-    DOM.$editCardSubmit.on('click', editCardContent);
-    DOM.$closeDialogButton.on('click', closeDialog);
-
     DOM.$newCardForm.on('submit', createCard);
     DOM.$deleteCardButton.on('click', deleteCard);
+    DOM.$editCards.on('click', editCard);
+
+    DOM.$editCardSubmit.on('click', editCardContent);
+    DOM.$editCardStyleSubmit.on('click', toggleBackgroundImage);
+
+    DOM.$motivateButton.on('click', motivateDialog);
+    DOM.$closeDialogButton.on('click', closeDialog);
   }
 
   /* ============== Metoder för att hantera edit card dialog data nedan ============== */
 
-  // Den här funktionen skriver lagrar förändringar i kortens data i localstorage
   function editCardContent() {
     event.preventDefault();
     let cardId = $('input[name="card-content-id"]').val();
@@ -251,16 +224,16 @@ function motivateDialog() {
     localStorage.setItem(`${cardId}_task`, `${cardTask}`);
     localStorage.setItem(`${cardId}_date`, `${cardDate}`);
 
-    $(`#${cardId} .cards-content`).text(cardTitle);
+    $(`[data-card-id = ${cardId}] .cards-content`).text(cardTitle);
   }
 
   function toggleBackgroundImage() {
     event.preventDefault();
     let cardId = $('input[name="card-style-id"]').val();
     if ($('#bg-check').is(':checked')) {
-      $(`#${cardId}`).closest('.list').bgimage();
+      $(`[data-card-id = ${cardId}] .cards-content`).closest('.list').bgimage();
     } else {
-      $(`#${cardId}`).closest('.list').bgimage("destroy");
+      $(`[data-card-id = ${cardId}] .cards-content`).closest('.list').bgimage("destroy");
     }
   }
 
@@ -269,11 +242,11 @@ function motivateDialog() {
     event.preventDefault();
     let newListTitle = $('input[name="list-title"').val();
 
-    let count = jtrello.countColumns();
+    let count = countColumns();
     if (count >= 10) {
       $('#maxBoardsDialog').dialog('open');
     } else {
-
+      let currentListId = $('.list').length + 1;
       let clonedList = DOM.$columns.last().prev().clone(false, false);
       clonedList.show();
 
@@ -287,15 +260,17 @@ function motivateDialog() {
       clonedList.find('.cards > .cards-content').on('click', editCard);
       clonedList.find('form.new-card').on('click', createCard);
       clonedList.find('.list-header span').text(newListTitle);
+      clonedList.find('.list').attr({
+        'data-list-id': currentListId
+      });
       clonedList.find('.cards').remove();
-
       clonedList.insertAfter(DOM.$board.find('.column').last());
     }
   }
 
   // Behåller en kolumn som clone-template i createList-metoden
   function deleteList() {
-    let count = jtrello.countColumns();
+    let count = countColumns();
     if (count <= 1) {
       $(this).closest('.column').hide();
     } else {
@@ -305,17 +280,26 @@ function motivateDialog() {
 
   /* =========== Metoder för att hantera kort i listor nedan =========== */
   function createCard(event) {
-
     event.preventDefault();
 
     let currentCardId = $('.cards').length + 1;
 
     let cardTitle = $(this).find('input[name="title"]').val();
     let newCard = $(`
-    <li id="${currentCardId}" class="cards my-3">
+    <li data-card-id="${currentCardId}" class="cards my-3">
     <div class="cards-content"> Card #${currentCardId}: ${cardTitle} </div>
     <button class="button delete">X</button>
     </li>`);
+
+    let cardObject = {
+      'id': currentCardId,
+      'title': cardTitle,
+      'date': ''
+    };
+
+    // Put the object into storage
+    localStorage.setItem(`${currentCardId}`, JSON.stringify(cardObject));
+
     newCard.sortable({
       items: "> li",
       connectWith: ".list-cards"
@@ -331,14 +315,11 @@ function motivateDialog() {
     $(this).closest('.cards').remove();
   }
 
-  // Metod för att rita ut element i DOM:en
-  function render() {}
 
   /* =================== Publika metoder nedan ================== */
 
   // Init metod som körs först
   function init() {
-    console.log(':::: Initializing JTrello ::::');
     // Förslag på privata metoder
     captureDOMEls();
     createTabs();
@@ -347,16 +328,17 @@ function motivateDialog() {
     createDatepicker();
     bindEvents();
     cardIdentifier();
+    listIdentifier();
   }
 
   // All kod här
   return {
-    init: init,
-    countColumns: countColumns,
+    init: init
   };
 })();
 
 //usage
 $("document").ready(function () {
+  localStorage.clear();
   jtrello.init();
 });
